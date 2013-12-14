@@ -2,7 +2,7 @@
 
 #### Shortcuts for the chef `knife` command
 
-kknife lets you use the shortest substring to uniquely identify a knife sub commands. 
+kknife lets you use the shortest substring to uniquely identify a knife sub command. 
 kknife also provides a `k` script to launch the lookups
 
 `k n e somenode` = `knife node edit somenode`
