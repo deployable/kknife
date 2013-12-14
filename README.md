@@ -1,18 +1,25 @@
 ## kknife 0.1.1
 
-### Shortcuts for the chef knife command
+#### Shortcuts for the chef `knife` command
 
-`k n e somenode    = knife node edit somenode`
-`k c u somebook    = knife cookbook upload somebook`
-`k e u ff somefile = knife cookbook from_file somefile`
+kknife lets you use the shortest substring to uniquely identify a knife sub commands. 
+kknife also provides a `k` script to launch the lookups
+
+`k n e somenode` = `knife node edit somenode`
+
+`k c u somebook` = `knife cookbook upload somebook`
+
+`k e u ff somefile` = `knife cookbook from_file somefile`
 
 `k -l` lists all your commands
 
 `k -d` might tell you what's going wrong.
 
-Lookups for shortcuts and ambiguous commands are currently statically defined in `lib/kknife/lookup.rb`. These will be user configurable/overridable. Some form of json/yml blob in ~/.chef/ should do. 
+#### Lookups 
 
-  Shortcuts
+Shortcuts and ambiguous commands are currently statically defined in `lib/kknife/lookup.rb`. These will be user configurable/overridable. Some form of json/yml blob in ~/.chef/ should do. 
+
+##### Shortcuts
 ```
     'ff' => [ 'from', 'file' ],
     'db' => [ 'data', 'bag' ],
@@ -22,7 +29,7 @@ Lookups for shortcuts and ambiguous commands are currently statically defined in
     'ns' => [ 'node', 'show' ],
     'rl' => [ 'run', 'list' ],
 ```
-  Ambiguities
+##### Ambiguities
 ```
     'd' => ['download'],
     'e' => ['environment'],
