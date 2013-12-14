@@ -17,16 +17,34 @@
 require 'kknife/dbg'
 
 ### Command 
-# This is used to store a tree of commands
-# Allow you to navigate up and down the tree.
+#
+# This is used to store a tree of Commands by name
+# Like a hash, but with a few extra features
+#
+#   knife
+#     node
+#       list
+#       edit
+#     environment
+#       list
+#       edit
+#
+# Allows you to navigate up and down the tree.
 
 class Command
 
   include Dbg
   
+  # For the end of the tree
   class NoMoreSubCommands < StandardError; end
+
+  # For the end of the user commands
   class NoMoreSuppliedCommands < StandardError; end
+
+  # When more than one Command is looked up
   class AmbiguousCommand < StandardError; end
+
+  # When no Command's can be found
   class NotFoundCommand < StandardError; end
 
   attr_accessor :cmd, :cmd_short, :sub_commands, :source, :level, :parent, :root, :controller
@@ -62,7 +80,7 @@ class Command
     debug_logger.debug( 'Command init' )
   end
   
-  # return the command
+  # return the command string
   def to_s 
     @cmd
   end
@@ -78,7 +96,7 @@ class Command
   end
 
 
-  # Print current command recurse through sub commands
+  # Print current command as a tree, recurse through sub commands
   def pp
     printf "%s%s\n", '  ' * level, cmd
     @sub_commands.each_key do |key|
@@ -86,6 +104,8 @@ class Command
     end
   end
   
+  # Print the current command on a single line if it's the last 
+  # in the tree, otherwise move down.
   def pp_single
     printf "%s\n", command_lookup.reverse.join(' ') if has_no_sub_commands?
     @sub_commands.each_key do |key|
@@ -93,6 +113,7 @@ class Command
     end
   end
 
+  # Recurse back down the Command tree and return the full command
   def command_lookup
     return [ @cmd ] + @parent.command_lookup unless @parent.nil?
     [ @cmd ]
@@ -147,6 +168,7 @@ class Command
     dbg 'list',  sub_command_list
     dbg 'rest',  rest_commands
 
+    # If we have a command or can look one up, all is good
     if has_sub_command? first_command or sub_command_list.length == 1
 
       cmd   = sub_command first_command
@@ -159,9 +181,9 @@ class Command
       return cmd.process_lookup rest_commands
 
 
+    # If there was more than one match, check the ambiguity config
+    # or error
     elsif sub_command_list.length > 1
-      # If there was more than one match, check the ambiguity config
-      # or error
 
       if Lookup.ambiguity( first_command )
         process_lookup Lookup.ambiguity( first_command ) + rest_commands
@@ -171,9 +193,9 @@ class Command
       end
 
 
+    # If there's an underscore, split it out
     elsif first_command.index(/_/)
-      # If there's an underscore, split it out
-
+      
       cmdsplit = first_command.split( /_/ )
 
       # notify the controller of the command changes
@@ -187,17 +209,17 @@ class Command
       process_lookup [ first_command ] + rest_commands
       
 
+    # Otherwise the command wasn't found, 
+    # Look up shortcuts before giving up
     else
-      # Otherwise the command wasn't found, 
-      # Look up shortcuts before giving up
 
       shortcut = Lookup.shortcut( first_command )
+
       if shortcut
         @controller.found_shortcut shortcut
         process_lookup shortcut + rest_commands
-
       else
-        raise NotFoundCommand, "not found [#{first_command}.*]"
+        raise NotFoundCommand, "sub command not found: [#{first_command}*]"
       end
       
     end

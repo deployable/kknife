@@ -107,5 +107,24 @@ describe Knifecmd do
     end
   end
 
+
+  it "abort on ambiguous command" do
+    expect{ 
+      begin
+        @k.resolve( ['s'] )
+      rescue SystemExit
+      end
+    }.to stderr( "error looking up [[\"s\"]]. ambiguous [s] [search,show,ssh,status]\n" )
+  end
+
+  it "abort on ambiguous command" do
+    expect{ 
+      begin
+        @k.resolve( ['z','y'] )
+      rescue SystemExit
+      end
+    }.to stderr( "error looking up [[\"z\", \"y\"]]. sub command not found: [z*]\n" )
+  end
+
 end
 

@@ -20,9 +20,11 @@ require 'chef/knife'
 require 'chef/application/knife'
 
 ### Knifecmd 
-# Used as the base for the knife command. 
-# Stories information about the run and the 
-# Command tree
+#
+# Used as the base for the knife commands. 
+#
+# Stores information about the current lookup 
+# and the Command tree
 
 class Knifecmd
 
@@ -128,10 +130,10 @@ class Knifecmd
       @cmd_root.process_lookup commands
 
     rescue Command::AmbiguousCommand => e
-      raise "error [#{commands.to_s}] #{e}"
+      abort "error looking up [#{commands.to_s}]. #{e}"
       
     rescue Command::NotFoundCommand => e
-      raise "error [#{commands.to_s}] #{e}"
+      abort "error looking up [#{commands.to_s}]. #{e}"
 
     rescue Command::NoMoreSubCommands
       dbg "end of knife lookups", @cmd_found.join(','), @cmd_left.join(',')
@@ -145,7 +147,7 @@ class Knifecmd
   end
 
   
-  # if the Command lookup needs to split a command
+  # If the Command lookup needs to split a command
   # remove the command from what's left and split it 
   # into the componenets
   def cmd_split( split_command_array )
@@ -167,7 +169,7 @@ class Knifecmd
   end
 
 
-  # if the Command lookup hits a shortcut, adjust local 
+  # If the Command lookup hits a shortcut, adjust local 
   # variables to match
   def found_shortcut( shortcut )
     dbg 'found_shortcut b4 ', shortcut.join(','), '|', @cmd_left.join(',')
@@ -177,20 +179,20 @@ class Knifecmd
   end
 
 
-  # reset the command found instance variables
+  # Reset the command found instance variables
   def reset_found( commands = [] )
     @cmd_found = []
     @cmd_left  = commands.dup
   end
 
 
-  # return the found command as a space seperated string
+  # Return the found command as a space seperated string
   def found_string
     ([ @root ] + @cmd_found ).join(' ')
   end
 
 
-  # resolve a list of commands into real commands
+  # Resolve a list of commands into real commands
   def resolve( commands )
     lookup commands
     @cmd_found + @cmd_left

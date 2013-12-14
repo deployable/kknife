@@ -17,17 +17,16 @@
 require 'logger'
 
 ### Dbg 
-# a quick debug logger 
-# classes can run `dbg`
+#
+# A quick debug logger so lasses can call `dbg`
+#
+#     class Yours
+#       include Dbg
+#       def method
+#         dbg 'some', values, logged
+#       end
+#     end
 
-# ```
-# class Yours
-#   include Dbg
-#   def method
-#     dbg 'some', values, logged
-#   end
-# end
-# ```
 
 module Dbg
 

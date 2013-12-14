@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name             = 'kknife'
-  s.version          = '0.1.1'
-  s.date             = '2013-12-13'
+  s.version          = '0.1.2'
+  s.date             = '2013-12-14'
 
   s.platform         = Gem::Platform::RUBY
   s.extra_rdoc_files = %w( LICENSE README.md )

@@ -17,38 +17,40 @@
 require 'logger'
 
 ### Log - a global logger instance for classes 
-
+#
 # Allows you to call a single logger instance easily from your classes
-
-# ```
-# class Yours
-#   include Log
-#   def method
-#     log.info 'something'
-#   end
-# end
-# ```
+#
+#     class Yours
+#       include Log
+#       def method
+#         log.info 'something'
+#       end
+#     end
 
 module Log
 
   DefaultIO = STDOUT
 
+  # returns the singleton
   def log
     Logging.log
   end
 
+  # replace the logger with a new target
   def self.replace( io )
     l = Logger.new io
     l.level = @log.level
     @log = l
   end
 
+  # create a new logger
   def self.create
     l = Logger.new DefaultIO
     l.level = Logger::INFO
     l
   end
 
+  # return the singleton or create it
   def self.log
     @log ||= create
   end

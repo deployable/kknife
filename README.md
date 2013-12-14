@@ -1,4 +1,4 @@
-## kknife 0.1.1
+## kknife 0.1.2
 
 #### Shortcuts for the chef `knife` command
 
