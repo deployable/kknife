@@ -9,11 +9,13 @@ kknife also provides a `k` script to launch the lookups
 
 `k c u somebook` = `knife cookbook upload somebook`
 
-`k e u ff somefile` = `knife cookbook from_file somefile`
+`k e ff somefile` = `knife environment from_file somefile`
 
 `k -l` lists all your commands
 
-`k -d` might tell you what's going wrong.
+`k -d` might tell you what's going wrong (debug).
+
+All command line options at the end of the command are passed through to knife unmodified and work as knife specifies. 
 
 #### Lookups 
 
